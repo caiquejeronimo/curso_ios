@@ -11,8 +11,6 @@
   - CSS
   - SCSS
   - HTML
-  - Salesforce Commerce Cloud
-  - Salesforce Marketing Cloud
-  - Salesforce Service Cloud
+  - Salesforce Commerce, Marketing e Service Cloud
   - Wordpress
 - **Tempo de atuação na area de TI:** 5 anos
