@@ -244,7 +244,9 @@ func showMenu() {
 
 """)
 }
-
+/// Laço infinito que mostra o menu no terminal
+///
+/// Ao escolher 0, desliga o terminal
 while true {
     showMenu()
     
@@ -287,11 +289,8 @@ while true {
         }
         
     case "2":
-        print("List books")
-        
         library.showAllBooks()
     case "3":
-        print("Search book by ID")
         print("Book ID:")
         guard let idInput = readLine(), let id = UUID(uuidString: idInput) else {
             print("Invalid ID")
@@ -299,7 +298,6 @@ while true {
         }
         library.searchBook(byId: id)
     case "4":
-        print("Search book by title")
         
         print("Title:")
         
@@ -307,7 +305,6 @@ while true {
         
         library.searchBook(byTitle: title)
     case "5":
-        print("Update book")
         
         print("Book ID: ")
         
@@ -328,7 +325,6 @@ while true {
         
         library.updateBook(id: id, newTitle: newTitle, newAuthor: newAuthor, newYear: newYear)
     case "6":
-        print("Remove book")
         
         print("Book ID:")
         
@@ -339,7 +335,6 @@ while true {
         
         library.remove(byId: id)
     case "7":
-        print("Borrow book")
         
         print("Book ID: ")
         
@@ -354,7 +349,6 @@ while true {
             print("Book not found")
         }
     case "8":
-        print("Return book")
         
         print("Book ID: ")
         
@@ -376,5 +370,3 @@ while true {
     }
 
 }
-
-
