@@ -1,19 +1,39 @@
 import Foundation
 
+/// Define o protocol base que será utilizado ao decorrer da aplicação
+
 protocol Document {
+    
+    /// Identificador unico do documento
     var id: UUID { get }
     
+    /// Exibe os detalhes do documento no console
     func showDetails()
 }
 
+/// Representa um livro de uma biblioteca
+///
+/// Implementa o protocol `Document` e contém as infos basicas de um livro
+
 class Book: Document {
+    /// Identificador unico do livro
     let id: UUID
+    
+    /// Infos basicas do livro, como titulo, autor, ano de publicação e se o livro está emprestado
     
     private(set) var title: String
     private(set) var author: String
     private(set) var yearPublished: Int
     private(set) var isBorrowed: Bool
     
+    
+    /// Cria uma nova instancia de livro, com parametos sendo:
+    /// - Parameters:
+    ///  - id: UUID unico do livro
+    ///  - title: Titulo do livro
+    ///  - author: Autor do livro
+    ///  - yearPublished: Ano de publicação
+    ///  - isBorrowed:  Se o livro está emprestado
     init(id: UUID, title: String, author: String, yearPublished: Int, isBorrowed: Bool) {
         self.id = id
         self.title = title
@@ -22,7 +42,9 @@ class Book: Document {
         self.isBorrowed = isBorrowed
     }
     
+    /// Marca o livro como emprestado
     func borrow() {
+        /// impede emprestimos duplicados
         guard !isBorrowed else {
             print("Book already borrowed")
             return
@@ -31,6 +53,7 @@ class Book: Document {
     }
     
     func returnBook() {
+        /// Impede devoluções de livros já devolvidos
         guard isBorrowed else {
             print("Book available!")
             return
@@ -38,17 +61,26 @@ class Book: Document {
         isBorrowed = false
     }
     
+    /// Atualiza o título do livro.
+    ///
+    ///  - Parameter newTitle: Novo título
     func updateTitle(_ newTitle: String) {
         title = newTitle
     }
     
+    /// Atualiza o autor do livro
+    ///
+    /// - Parameter newAuthor: Novo autor
     func updateAuthor(_ newAuthor: String) {
         author = newAuthor
     }
+    /// Atualiza o ano de publicação do livro
+    ///
+    /// - Parameter newYear: Novo ano
     func updateYear(_ newYear: Int) {
         yearPublished = newYear
     }
-    
+    /// Exibe no console todas as informações do livro
     func showDetails() {
         print("ID: \(id) | title: \(title) | Author: \(author) | Year Published: \(yearPublished) | Is Borrowed: \(isBorrowed ? "Yes" : "No")")
     }
