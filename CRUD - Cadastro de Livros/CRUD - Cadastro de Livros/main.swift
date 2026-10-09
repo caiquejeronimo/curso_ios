@@ -110,16 +110,24 @@ class EBook: Book {
             isBorrowed: isBorrowed
         )
     }
-    
+    /// Exibe os detalhes do livro digital
+    ///
+    /// Sobrescreve a func `showDetails` da classe pai p/ incluir o tamanho do arquivo
     override func showDetails() {
         super.showDetails()
         print("File Size: \(fileSize) MB")
     }
 }
 
+/// Responsável por gerenciar a biblioteca
+///
+/// Implementa o CRUD
 class Library {
+    /// Lista de livros cadastrados
     var bookList: [Book] = []
     
+    /// Adiciona um livro à biblioteca e impede duplicados
+    /// - Parameter book: Livro a ser cadastrado
     func addBook(_ book: Book) {
         let bookExists = bookList.contains {
             $0.id == book.id
@@ -133,6 +141,7 @@ class Library {
         print("Book succesfully added!")
     }
     
+    /// Lista todos os livros cadastrados
     func showAllBooks() {
         let separator: String = "----------------"
         
@@ -147,6 +156,9 @@ class Library {
         }
     }
     
+    /// Busca um livro pelo ID.
+    ///
+    /// - Parameter id: UUID do livro.
     func searchBook(byId id: UUID) {
         if let book = bookList.first(where: { $0.id == id }) {
             book.showDetails()
@@ -155,6 +167,12 @@ class Library {
         }
     }
     
+    
+    /// Busca livros pelo título.
+    ///
+    /// A busca não diferencia letras maiúsculas de minúsculas.
+    ///
+    /// - Parameter title: Nome do titulo
     func searchBook(byTitle title: String) {
         if let book = bookList.first(where: { $0.title.lowercased() == title.lowercased() }) {
             book.showDetails()
@@ -162,6 +180,10 @@ class Library {
             print("Book not found!")
         }
     }
+    
+    /// Remove um livro da biblioteca.
+    ///
+    /// - Parameter id: ID do livro.
     
     func remove(byId id: UUID) {
         guard let index = bookList.firstIndex(where: { $0.id == id }) else {
@@ -173,6 +195,13 @@ class Library {
         print("Book removed successfully")
     }
     
+    /// Atualiza as informações de um livro.
+    ///
+    /// - Parameters:
+    ///  - id: UUID unico do livro
+    ///  - newTitle: Novo titulo do livro
+    ///  - newAuthor: Novo Autor do livro
+    ///  - newYear: Novo ano de publicação
     func updateBook(id: UUID, newTitle: String?, newAuthor: String?, newYear: Int?) {
         guard let book = bookList.first(where: { $0.id == id }) else {
             print("Book not found!")
@@ -197,6 +226,8 @@ let library = Library()
 
 // Menu
 
+
+/// Menu principal que ficará no console
 func showMenu() {
     print("""
     LIBRARY OPERATIONS
@@ -254,8 +285,6 @@ while true {
             let ebook = EBook(id: UUID(), title: title, author: author, yearPublished: year, isBorrowed: false, fileSize: fileSize)
             library.addBook(ebook)
         }
-        
-
         
     case "2":
         print("List books")
