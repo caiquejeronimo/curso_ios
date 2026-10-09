@@ -51,7 +51,7 @@ class Book: Document {
         }
         isBorrowed = true
     }
-    
+    /// Marca o livro como devolvido
     func returnBook() {
         /// Impede devoluções de livros já devolvidos
         guard isBorrowed else {
@@ -86,9 +86,20 @@ class Book: Document {
     }
 }
 
-class eBook: Book {
+    /// Classe de livros digitals que herda a classe `Book` e adiciona fileSize nos paremtros
+class EBook: Book {
+    /// Tamanho do arquivo em MB
     var fileSize: Double
     
+    /// Cria a instancia de um livro digital.
+    ///
+    /// - Parameters:
+    ///  - id: UUID unico do livro
+    ///  - title: Titulo do livro
+    ///  - author: Autor do livro
+    ///  - yearPublished: Ano de publicação
+    ///  - isBorrowed: Se o livro está emprestado
+    ///  - fileSize:ttamanho do arquivo em MB
     init(id: UUID, title: String, author: String, yearPublished: Int, isBorrowed: Bool,fileSize: Double) {
         self.fileSize = fileSize
         super.init(
@@ -210,7 +221,10 @@ while true {
     
     switch option {
     case "1":
-        print("Add book")
+        print("1 - Physical Book")
+        print("2 - E-book")
+        
+        let type = readLine()
         
         print("Enter book title:")
         guard let title = readLine() else { break }
@@ -223,12 +237,25 @@ while true {
             print("Invalid Year")
             break
         }
+    
         
-        let book = Book(id: UUID(), title: title, author: author, yearPublished: year, isBorrowed: false)
+        if type == "1" {
+            let book = Book(id: UUID(), title: title, author: author, yearPublished: year, isBorrowed: false)
+           
+            library.addBook(book)
+        } else if type == "2" {
+            print("File Size (MB):")
+            
+            guard let sizeInput = readLine(), let fileSize = Double(sizeInput) else {
+                print("Invalid size")
+                break
+            }
+            
+            let ebook = EBook(id: UUID(), title: title, author: author, yearPublished: year, isBorrowed: false, fileSize: fileSize)
+            library.addBook(ebook)
+        }
         
-       
-        library.addBook(book)
-        
+
         
     case "2":
         print("List books")
