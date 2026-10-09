@@ -230,8 +230,8 @@ let library = Library()
 /// Menu principal que ficará no console
 func showMenu() {
     print("""
-    LIBRARY OPERATIONS
-
+    ===== LIBRARY OPERATIONS =====
+---------------------------------------
     1 - Add Book
     2 - List Books
     3 - Search Book by ID
@@ -289,6 +289,7 @@ while true {
         }
         
     case "2":
+        print("Book list:")
         library.showAllBooks()
     case "3":
         print("Book ID:")
