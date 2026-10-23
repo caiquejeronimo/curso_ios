@@ -1,6 +1,4 @@
 import SwiftUI
-import Observation
-
 
 struct ContentView: View {
     
@@ -37,28 +35,28 @@ struct ContentView: View {
     // Func
     
     private func addStudent() {
-        // let trimName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard !name.isEmpty else {
-            print("Nome inválido")
+        guard !trimName.isEmpty else {
+            errorMessage = "Nome inválido"
             
             return
         }
         
         guard let score1 = Double(grade1),
               let score2 = Double(grade2) else {
-            print("Notas inválidas")
+            errorMessage = "Notas inválidas"
             return
         }
         
         guard (0...10).contains(score1), (0...10).contains(score2) else {
-            print("As notas devem estr entre 0 e 10")
+            errorMessage = "As notas devem estar entre 0 e 10"
             
             return
         }
         
         let student = Student(
-            name: name,
+            name: trimName,
             grade1: score1,
             grade2: score2
         )
@@ -70,6 +68,7 @@ struct ContentView: View {
         name = ""
         grade1 = ""
         grade2 = ""
+        
     }
     
     private func removeStudent(id: UUID) {
@@ -207,7 +206,9 @@ struct ContentView: View {
 
                                         Text(student.name)
                                             .font(.headline)
-
+                                        
+                                        Text("Nota 1: \(student.grade1, specifier: "%.1f")")
+                                        Text("Média: \(student.grade2, specifier: "%.1f")")
                                         Text("Média: \(student.average, specifier: "%.1f")")
 
                                         Label(
