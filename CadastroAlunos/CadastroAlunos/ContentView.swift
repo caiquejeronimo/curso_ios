@@ -257,7 +257,8 @@ struct CustomFieldView: View {
         TextField(label, text: $value)
             .textFieldStyle(.plain)
             .padding(5)
-            .background(.white.opacity(0.5))
+            .background(RoundedRectangle(cornerRadius: 5)
+                .fill(Color(uiColor: .systemCyan).opacity(0.45)))
     }
 }
 
