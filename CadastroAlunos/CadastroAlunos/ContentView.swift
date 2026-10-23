@@ -35,40 +35,26 @@ struct ContentView: View {
     // Func
     
     private func addStudent() {
-        let trimName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        guard !trimName.isEmpty else {
-            errorMessage = "Nome inválido"
-            
-            return
-        }
-        
+
+        guard !name.isEmpty else { return }
+
         guard let score1 = Double(grade1),
-              let score2 = Double(grade2) else {
-            errorMessage = "Notas inválidas"
-            return
-        }
-        
-        guard (0...10).contains(score1), (0...10).contains(score2) else {
-            errorMessage = "As notas devem estar entre 0 e 10"
-            
-            return
-        }
-        
+              let score2 = Double(grade2) else { return }
+
+        guard (0...10).contains(score1),
+              (0...10).contains(score2) else { return }
+
         let student = Student(
-            name: trimName,
+            name: name,
             grade1: score1,
             grade2: score2
         )
-        
+
         students.append(student)
-        
-        // Limpa form
-        
+
         name = ""
         grade1 = ""
         grade2 = ""
-        
     }
     
     private func removeStudent(id: UUID) {
@@ -236,7 +222,12 @@ struct ContentView: View {
                                 }
                             }
                             .padding()
-                            .background(.white.opacity(0.25))
+                            .background(
+                               Color(
+                                student.average >= 7 ? .green.opacity(0.25) : .red.opacity(0.25)
+                               )
+                            )
+                            //.background(.white.opacity(0.25))
                             .clipShape(
                                 RoundedRectangle(cornerRadius: 15)
                             )
