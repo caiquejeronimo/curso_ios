@@ -13,7 +13,7 @@ struct ContentView: View {
     
     private var iconColor = LinearGradient(colors: [.mint,.cyan, .indigo], startPoint: .topLeading, endPoint: .bottomTrailing)
     
-    private var bgColor = LinearGradient(colors: [.indigo, .cyan, .mint], startPoint: .top, endPoint: .bottom)
+    private var bgColor = LinearGradient(colors: [.indigo,.indigo,.cyan, .mint], startPoint: .topTrailing, endPoint: .bottomLeading)
     
     // Propriedades
     var totalStudents : Int {
@@ -109,7 +109,7 @@ struct ContentView: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(.mint.opacity(0.3).gradient)
+                    .background(.cyan.opacity(0.7))
                     .clipShape(Capsule())
                     .font(.title3)
                     .foregroundStyle(.black)
@@ -258,7 +258,7 @@ struct CustomFieldView: View {
             .textFieldStyle(.plain)
             .padding(5)
             .background(RoundedRectangle(cornerRadius: 5)
-                .fill(Color(uiColor: .systemCyan).opacity(0.45)))
+                .fill(Color(uiColor: .systemGray6).opacity(0.5)))
     }
 }
 
