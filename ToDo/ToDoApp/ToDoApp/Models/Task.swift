@@ -1,7 +1,7 @@
-//
-//  Task.swift
-//  ToDoApp
-//
-//  Created by Aléo, Caique Jeronimo de Araújo on 09/11/26.
-//
+import  Foundation
 
+struct Task: Identifiable {
+    let id = UUID()
+    var title: String
+    var isCompleted: Bool = false
+}
