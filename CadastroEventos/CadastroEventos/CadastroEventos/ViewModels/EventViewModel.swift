@@ -10,6 +10,8 @@ class EventViewModel {
 
     private(set) var events: [Event] = []
 
+    var editingEvent: Event?
+
     var title = ""
     var desc = ""
     var date = Date.now
@@ -63,7 +65,12 @@ class EventViewModel {
             ]
         )
 
-        events = (try? modelContext.fetch(descriptor)) ?? []
+        do {
+            events = try modelContext.fetch(descriptor)
+        } catch {
+            events = []
+            print("Erro ao listar eventos: \(error)")
+        }
     }
 
     func saveEvent() -> Bool {
@@ -86,47 +93,113 @@ class EventViewModel {
             return false
         }
 
-        let event = Event(
+        let newEvent = Event(
             title: cleanTitle,
             desc: cleanDescription,
             date: date,
             place: cleanPlace
         )
 
-        modelContext.insert(event)
+        modelContext.insert(newEvent)
 
         do {
             try modelContext.save()
+            
+            events.append(newEvent)
+            
             cleanFields()
-            listEvents()
+            
             return true
         } catch {
             print("Erro ao salvar evento: \(error)")
+            listEvents()
+            
             return false
         }
 
     }
 
-    func deleteEvent(at offSets: IndexSet) {
-        let visibleEvents = filteredEvents
+    func deleteEvent(_ event: Event) {
+        let eventID = event.id
 
-        for index in offSets.sorted(by: >) {
-            guard visibleEvents.indices.contains(index) else {
-                continue
-            }
+        events.removeAll { $0.id == eventID }
 
-            modelContext.delete(visibleEvents[index])
-        }
+        modelContext.delete(event)
 
         do {
             try modelContext.save()
-            listEvents()
         } catch {
             print("Erro ao excluir evento: \(error)")
-        }
 
+            listEvents()
+        }
     }
 
+    func startEditing(_ event: Event) {
+        editingEvent = event
+
+        title = event.title
+        desc = event.desc
+        date = event.date
+        place = event.place
+    }
+
+    @discardableResult
+    func updateEvent() -> Bool {
+        guard let event = editingEvent else {
+            return false
+        }
+
+        let cleanTitle = title.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        let cleanDescription = desc.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        let cleanPlace = place.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        guard !cleanTitle.isEmpty,
+            !cleanDescription.isEmpty,
+            !cleanPlace.isEmpty
+        else {
+            return false
+        }
+
+        event.title = cleanTitle
+        event.desc = cleanDescription
+        event.date = date
+        event.place = cleanPlace
+
+        do {
+            try modelContext.save()
+
+            events.sort {
+                $0.date < $1.date
+            }
+
+            cleanFields()
+
+            return true
+        } catch {
+            print("Erro ao atualizar evento: \(error)")
+            listEvents()
+
+            return false
+        }
+    }
+
+    @discardableResult
+    func save() -> Bool {
+        if editingEvent != nil {
+            return updateEvent()
+        }
+        
+        return saveEvent()
+    }
     // limpa form
     func cleanFields() {
         title = ""

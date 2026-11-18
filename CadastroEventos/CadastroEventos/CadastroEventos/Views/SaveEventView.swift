@@ -7,6 +7,8 @@ struct SaveEventView: View {
 
     @Bindable var viewModel: EventViewModel
 
+    var editingEvent: Event?
+
     var body: some View {
         NavigationStack {
             Form {
@@ -16,7 +18,7 @@ struct SaveEventView: View {
 
                 saveSection
             }
-            .navigationTitle("Novo Evento")
+            .navigationTitle(viewModel.editingEvent == nil ? "Novo evento" : "Editar evento")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -57,7 +59,7 @@ struct SaveEventView: View {
                 selection: $viewModel.date,
                 displayedComponents: [
                     .date,
-                    .hourAndMinute
+                    .hourAndMinute,
                 ]
             )
         }
@@ -66,17 +68,19 @@ struct SaveEventView: View {
     private var saveSection: some View {
         Section {
             Button {
-                let didSave = viewModel.saveEvent()
-
-                if didSave {
+                if viewModel.save() {
                     dismiss()
                 }
             } label: {
                 Label(
-                    "Cadastrar evento",
-                    systemImage: "calendar.badge.plus"
+                    viewModel.editingEvent == nil
+                        ? "Cadastrar evento"
+                        : "Salvar alterações",
+                    systemImage:
+                        viewModel.editingEvent == nil
+                        ? "calendar.badge.plus"
+                        : "checkmark.circle"
                 )
-                .frame(maxWidth: .infinity)
             }
             .disabled(!viewModel.canSave)
         }

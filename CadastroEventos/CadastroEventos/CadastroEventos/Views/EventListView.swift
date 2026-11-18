@@ -36,24 +36,42 @@ struct EventListView: View {
             .sheet(isPresented: $showingNewEvent) {
                 SaveEventView(viewModel: viewModel)
             }
-            .onAppear {
-                viewModel.listEvents()
-            }
         }
     }
 
     private var eventsList: some View {
         List {
-            ForEach(viewModel.filteredEvents) { event in
-                EventRowView(event: event)
-            }
-            .onDelete { offsets in
-                viewModel.deleteEvent(at: offsets)
+            ForEach(
+                viewModel.filteredEvents,
+                id: \.id
+            ) { event in
+
+                Button {
+                    viewModel.startEditing(event)
+                    showingNewEvent = true
+                } label: {
+                    EventRowView(event: event)
+                }
+                .buttonStyle(.plain)
+                .swipeActions(
+                    edge: .trailing,
+                    allowsFullSwipe: true
+                ) {
+                    Button(
+                        role: .destructive
+                    ) {
+                        viewModel.deleteEvent(event)
+                    } label: {
+                        Label(
+                            "Excluir",
+                            systemImage: "trash"
+                        )
+                    }
+                }
             }
         }
         .listStyle(.plain)
     }
-
 
     private var emptyState: some View {
         ContentUnavailableView(
